@@ -68,8 +68,12 @@ class SensorThread: public Thread
       // Reads the analog pin, and saves it localy
       int value = analogRead(pin);
       double newtemp = thermister(value);
-      temperature = (temperature * 0.8) + (newtemp * 0.2);
-      runned();
+      if (temperature != 0){
+        temperature = (temperature * 0.8) + (newtemp * 0.2);
+      }else{
+        temperature = newtemp;
+        }
+        runned();
     }
     
 };
@@ -104,7 +108,7 @@ unsigned int getServerTime() {
   return result;
 }
 
-
+int deviceId = 1;
 SensorThread analogThread(A0);
 ClockThread clockThread;
 
@@ -123,7 +127,7 @@ class HTTPThread : public Thread {
         USE_SERIAL.print("[HTTP] begin...\n");
         // configure traged server and url
         char buf[1024];
-        sprintf(buf, "http://192.168.4.1:4567/temp/%d/%d/%f", 2, clockThread.getTime(), analogThread.getTemperature());
+        sprintf(buf, "http://192.168.4.1:4567/temp/%d/%d/%f", deviceId, clockThread.getTime(), analogThread.getTemperature());
         http.begin(buf); //HTTP
 
         USE_SERIAL.print("[HTTP] POST...\n");
@@ -169,6 +173,9 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP("NameOfNetwork", "AardvarkBadgerHedgehog");
 
+  IPAddress addr = WiFi.localIP();
+  deviceId = addr[3];
+  
   // Configure my threads
   analogThread.setInterval(100);
   httpThread.setInterval(1000);
