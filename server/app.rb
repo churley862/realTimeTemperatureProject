@@ -6,6 +6,7 @@ end
 
 require 'sinatra'
 require 'json'
+require 'csv'
 
 # dev, time, temp
 
@@ -79,5 +80,20 @@ post '/reset' do
   data = []
 end
 
+get '/data.csv' do
+  result = [['time']]
+  maxflds = 0
+  sorted.keys.sort.each do |at|
+    maxflds = [sorted[at].length, maxflds].max
+    result << [at, *sorted[at]]
+  end 
+ 
+  maxflds.times do |i|
+    result[0] << "device#{i+1}"
+  end 
+
+  content_type 'text/csv'
+  result = result.map { |r| r.to_csv }.join()
+end
 
 

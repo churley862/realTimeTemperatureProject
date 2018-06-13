@@ -7,7 +7,7 @@ var getData = function() {
     new_columns = []
     result = result.map(function(row) { 
       o = {}
-      o["time"] = (new Date(row[0] * 1000)); 
+      o["time"] = (new Date(row[0] * 1000)).toLocaleTimeString(); 
       for(var i = 1; i < row.length; ++i) {
         if (row[i] != null) {
           var colName = `Device${i}`;
@@ -19,6 +19,7 @@ var getData = function() {
     });
 
     data = result;
+    buildTable();
   });
 };
 
@@ -34,7 +35,9 @@ var buildTable = function() {
 
   $('#table1').dynatable({
     dataset: {
-      records: data
+      records: data,
+      perPageOptions: [25],
+      perPageDefault: 25
     }
   })
 }

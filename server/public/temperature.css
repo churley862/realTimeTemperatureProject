@@ -65,3 +65,7 @@ div#logo img {
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
+
+table#table1 th a {
+  color: black;
+}
