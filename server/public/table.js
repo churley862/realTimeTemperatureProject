@@ -1,53 +1,41 @@
 var host = window.location.host;
 var data = [];
+var columns = {};
 
 var getData = function() {
   jQuery.getJSON(`http://${host}/temp`, function(result) {
-    data = result.map(function(row) { row[0] = new Date(row[0] * 1000); return row; });
-    return data;
-  });
-};
-
-var getLabels = function() {
-  var maxDevice = 0;
-  data.forEach(function(elem) {
-    maxDevice = Math.max(maxDevice, elem.length);
-  });
-
-  var result = ["TimeStamp"];
-  for (var i = 1; i < maxDevice; ++i) {
-    result.push("Device" + i);
-  }
-
-  return result;
-};
-chart = new Highcharts.Chart({
-    chart: {
-      type: 'column',
-      renderTo: 'Collected-data-chart'
-    },
-    title: {
-      text: 'Collected Temperature data'
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        text: 'Temperature (degrees fairenhight)'
+    new_columns = []
+    result = result.map(function(row) { 
+      o = {}
+      o["time"] = (new Date(row[0] * 1000)); 
+      for(var i = 1; i < row.length; ++i) {
+        if (row[i] != null) {
+          var colName = `Device${i}`;
+          columns[colName] = true;
+          o[colName.toLowerCase()] = row[i];
+        }
       }
-    },
-    series: [{
-      name: 'Temperature',
-      color: '#006A72'
-    }]
-  });
+      return o; 
+    });
 
-function updateChart() {
-   var dynatable = $table.data('dynatable'), categories = [], values = [];
-   $.each(dynatable.settings.dataset.records, function() {
-     categories.push(getLabels());
-     values.push(getData());
-     dynatable.display();
-   });
-    chart.xAxis[0].setCategories(categories);
-    chart.series[0].setData(values);
-  };
+    data = result;
+  });
+};
+
+var buildTable = function() {
+  $('#table1').empty();
+  $('#table1').append("<thead>");
+  $('#table1 thead').append("<tr>");
+  $('#table1 thead tr').append("<th>Time</th>");
+  for (var cname in columns) {
+    $('#table1 thead tr').append(`<th>${cname}</th>`);
+  }
+  $('#table1').append("<tbody>");
+
+  $('#table1').dynatable({
+    dataset: {
+      records: data
+    }
+  })
+}
+
