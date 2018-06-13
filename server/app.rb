@@ -78,6 +78,7 @@ end
 
 post '/reset' do
   data = []
+  sorted = {}
 end
 
 get '/data.csv' do
