@@ -40,9 +40,12 @@ get '/temp' do #  [?begin=timestamp&end=timestamp]
     #sorted[time][id] = temp
   #end
   result = []
+  maxKey = 1
   sorted.keys.sort.each do |at|
     result << [at, *sorted[at]]
+    maxKey = [maxKey, result.last.length].max
   end 
+  result = result.map { |r| r[maxKey - 1] ||= nil ; r }
   result.to_json
 end
 
