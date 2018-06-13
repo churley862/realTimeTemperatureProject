@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="temperature.css">
+    <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript">
+
+var host = window.location.host;
+
+$.post("http://" + host + "/time/" + Math.round((new Date).getTime()/1000));
+
+var updateDevices = function() {
+  $.getJSON(`http://${host}/status`, function(devices) {
+    console.log(devices);
+    $("#devices").empty();
+    for (var device in devices) {
+      device = devices[device];
+      $("#devices").append(`<h2> Device ${device.id}</h2><div id="temp#{device.id}" class='data'>
+                   At ${new Date(device.time * 1000)} ${device.temp}ºF</div>`);
+    }
+  });
+};
+
+setInterval(updateDevices, 1000);
+
+    </script>
+  </head>
+  <body id='status'>
+    <h1>Temperature monitoring</h1>
+
+    <div id='devices'></div>
+
+    <div id='logo'><img src='kettering.png'></div>
+
+    <div id='footer'>
+      <a class='btn' href='graph.html'>Show Live Graph</a>
+      <a class='btn' href='table.html'>Show Live Table</a>
+    </div>
+  </body>
+</html>

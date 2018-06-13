@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="dygraph.css">
+    <link rel="stylesheet" href="temperature.css">
+    <title>visibility</title>
+    <script type="text/javascript" src="dygraph.min.js"></script>
+    <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="graph.js"></script>
+  </head>
+  <body id='graph'>
+
+    <div id="graph1" style="width:100%; height:600px;"></div>
+
+    <script type="text/javascript">
+       setInterval(getData, 1000);
+    </script>
+
+    <div id='logo'><img src='kettering.png'></div>
+    <div id='footer'>
+      <a class='btn' href='index.html'>Show Status Page</a>
+    </div>
+  </body>
+</html>
+
