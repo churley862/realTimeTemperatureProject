@@ -12,7 +12,7 @@ var getData = function() {
         if (row[i] != null) {
           var colName = `Device${i}`;
           columns[colName] = true;
-          o[colName.toLowerCase()] = row[i];
+          o[colName.toLowerCase()] = `${row[i]}ºF`;
         }
       }
       return o; 

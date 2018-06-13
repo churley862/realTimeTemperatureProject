@@ -5,7 +5,10 @@ var g = undefined;
 var getData = function() {
   jQuery.getJSON(`http://${host}/temp`, function(result) {
     data = result.map(function(row) { row[0] = new Date(row[0] * 1000); return row; });
-    displayGraph();
+
+    if (data.length > 0) {
+       displayGraph();
+    }
   });
 };
 
